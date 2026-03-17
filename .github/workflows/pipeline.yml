@@ -27,12 +27,20 @@ jobs:
             - name: Build Docker image
               run: docker build -t cicd-lab:${{ github.sha }} .
     
-            - name: Simular Deploy
+            - name: Deploy (simulado com estado)
               run: |
-                echo "Deploying version ${{ github.sha}}"
-                mkdir -p deploy
-                echo "${{ github.sha }}" > deploy/version.txt
+                mkdir -p deploy  
+                echo "${{ github.sha }}" > deploy/current_version.txt
+                echo "Deployed version $(cat deploy/current_version.txt)"
+                
+            - name: Registrar versão
+              run: |
+                mkdir -p deploy/history
+                echo "${{ github.sha }}" >> deploy/history/versions.txt    
             
-            - name: Simular Rollback
+            - name: Rollback
               if: failure()
-              run: echo "Rollback triggered"
+              run: |
+                echo "Rollback triggered"
+                tail -n 2 deploy/history/versions.txt | head -n 1 > deploy/current_version.txt
+                echo "Rolled back to $(cat deploy/current_version.txt)"
