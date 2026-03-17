@@ -25,4 +25,4 @@ jobs:
               run: python -c "print('Test passed')"
             
             - name: Build Docker image
-              run: docker build -t cicd-lab:{{ github.sha }} .
+              run: docker build -t cicd-lab:${{ github.sha }} .
