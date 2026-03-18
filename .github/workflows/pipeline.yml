@@ -6,41 +6,19 @@ on:
             - main
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Checkout código
-              uses: actions/checkout@v3
-
-            - name: Setup Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: '3.11'
-
-            - name: Instalar dependências
-              run: pip install -r requirements.txt
-            
-            - name: Rodar teste simples
-              run: python -c "print('Test passed')"
-            
-            - name: Build Docker image
-              run: docker build -t cicd-lab:${{ github.sha }} .
+    ci:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v4
+          with:
+            python-version: '3.11'
+        - run: pip install -r requirements.txt
+        - run: python -c "print('Test passed')"
     
-            - name: Deploy (simulado com estado)
-              run: |
-                mkdir -p deploy  
-                echo "${{ github.sha }}" > deploy/current_version.txt
-                echo "Deployed version $(cat deploy/current_version.txt)"
-                
-            - name: Registrar versão
-              run: |
-                mkdir -p deploy/history
-                echo "${{ github.sha }}" >> deploy/history/versions.txt    
-            
-            - name: Rollback
-              if: failure()
-              run: |
-                echo "Rollback triggered"
-                tail -n 2 deploy/history/versions.txt | head -n 1 > deploy/current_version.txt
-                echo "Rolled back to $(cat deploy/current_version.txt)"
+    build:
+      needs: ci
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - run: docker build -t cicd-lab:${{ github.sha }} .
