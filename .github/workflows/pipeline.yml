@@ -28,14 +28,17 @@ jobs:
       steps:
         - uses: actions/checkout@v3
 
+        - name: List files (debug)
+          run: ls -R
+
         - name: Setup Terraform
           uses: hashicorp/setup-terraform@v3
         
         - name: Terraform init
           run: terraform init
-          working-directory: terraform
+          working-directory: ./terraform
 
         - name: Terraform plan
           run: terraform plan
-          working-directory: terraform
+          working-directory: ./terraform
 
