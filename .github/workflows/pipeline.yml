@@ -24,6 +24,7 @@ jobs:
         - run: docker build -t cicd-lab:${{ github.sha }} .
     
     terraform:
+      needs: build
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v3
