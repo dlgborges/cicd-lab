@@ -1,3 +1,4 @@
 .terraform/
 *.tfstate
 *.tfstate.backup
+terraform_1.7.5_linux_amd64.zip
