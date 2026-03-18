@@ -45,13 +45,10 @@ jobs:
         - name: Terraform init
           run: terraform init
           working-directory: ./terraform
-
-        - name: Terraform plan
-          run: terraform plan
-          working-directory: ./terraform
         
         - name: Save plan
           run: terraform plan -out=tfplan
+          working-directory: ./terraform
         
         - name: Upload plan
           uses: actions/upload-artifact@v4
