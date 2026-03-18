@@ -89,5 +89,5 @@ jobs:
         
         - name: Terraform apply
           if: github.ref == 'refs/heads/main'
-          run: terraform apply tfplan -auto-approve
+          run: terraform apply -auto-approve tfplan
           working-directory: ./terraform
