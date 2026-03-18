@@ -23,7 +23,7 @@ jobs:
         - uses: actions/checkout@v3
         - run: docker build -t cicd-lab:${{ github.sha }} .
     
-    terraform:
+    terraform-plan:
       needs: build
       runs-on: ubuntu-latest
       steps:
@@ -49,4 +49,27 @@ jobs:
         - name: Terraform plan
           run: terraform plan
           working-directory: ./terraform
+        
+        - name: Save plan
+          run: terraform plan -out=tfplan
+        
+        - name: Upload plan
+          uses: actions/upload-artifact@v4
+          with:
+            name: tfplan
+            path: terraform/tfplan 
 
+    terraform-apply:
+      needs: terraform-plan
+      runs-on: ubuntu-latest
+      environment: prod
+      steps:
+        - name: Download plan
+          uses: actions/download-artifact@v4
+          with:
+            name: tfplan
+        
+        - name: Terraform apply
+          if: github.ref == 'refs/heads/main'
+          run: terraform apply tfplan -auto-approve
+          working-directory: ./terraform
