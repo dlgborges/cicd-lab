@@ -9,8 +9,14 @@ provider "aws" {
 resource "aws_instance" "example" {
     ami             = "ami-0c02fb55956c7d316"
     instance_type   = "t2.micro"
+    key_name = aws_key_pair.deployer.key_name
 
     tags = {
         Name = "cicd-lab-instance"
     }
+}
+
+resource "aws_key_pair" "deployer" {
+    key_name = "cicd-key"
+    public_key = file("id_ed25519.pub") 
 }
