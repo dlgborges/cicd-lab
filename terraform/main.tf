@@ -25,6 +25,11 @@ resource "aws_security_group" "ssh" {
     }
 }
 
+#resource "aws_key_pair" "deployer" {
+#    key_name = "cicd-key"
+#    public_key = file("id_ed25519.pub") 
+#}
+
 resource "aws_instance" "example" {
     ami             = "ami-0c02fb55956c7d316"
     instance_type   = "t2.micro"
@@ -38,9 +43,4 @@ resource "aws_instance" "example" {
 
 output "public_ip" {
     value = aws_instance.example.public_ip
-}
-
-resource "aws_key_pair" "deployer" {
-    key_name = "cicd-key"
-    public_key = file("id_ed25519.pub") 
 }
