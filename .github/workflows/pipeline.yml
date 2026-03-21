@@ -48,8 +48,14 @@ jobs:
           working-directory: ./terraform
         
         - name: Save plan
-          run: terraform plan -out=tfplan
+          id: plan
+          run: |
+            terraform plan -detailed-exitcode -out=tfplan
           working-directory: ./terraform
+          continue-on-error: true
+
+        - name: Set exit code
+          run: echo "exitcode=${{ steps.plan.outcome == 'failure' && '2' || '0' }}" >> $GITHUB_ENV
         
         - name: Upload plan
           uses: actions/upload-artifact@v4
@@ -93,7 +99,7 @@ jobs:
           working-directory: ./terraform
         
         - name: Terraform apply
-          if: github.ref == 'refs/heads/main'
+          if: env.exitcode == '2'
           run: terraform apply -auto-approve tfplan
           working-directory: ./terraform
         
@@ -112,11 +118,12 @@ jobs:
         - name: Update inventory
           run: |
             sed -i "s/EC2_IP_PLACEHOLDER/$EC2_IP/" ansible/inventory.ini
+            cat ansible/inventory.ini
 
         - name: Install Ansible
           run: |
-            sudo yum update
-            sudo yum install -y ansible
+            sudo apt update
+            sudo apt install -y ansible
         
         - name: Run Ansible
           run: |
