@@ -1,9 +1,5 @@
 provider "aws" {
     region = "us-east-1"
-
-    assume_role {
-    role_arn = "arn:aws:iam::542525596293:role/terraform-execution-role"
-  }
 }
 
 resource "aws_security_group" "allow_ssh" {
@@ -99,7 +95,10 @@ resource "aws_instance" "cicd-lab-instance" {
     ami             = "ami-0c02fb55956c7d316"
     instance_type   = "t2.micro"
     key_name = "cicd-key"
-    vpc_security_group_ids = ["sg-073a1dec40b2e0ebd","default"]
+    vpc_security_group_ids = [
+        aws_security_group.allow_ssh.id,
+        aws_security_group.default.id
+    ]
 
     tags = {
         Name = "cicd-lab-instance"
