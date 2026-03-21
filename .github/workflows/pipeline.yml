@@ -96,3 +96,28 @@ jobs:
           if: github.ref == 'refs/heads/main'
           run: terraform apply -auto-approve tfplan
           working-directory: ./terraform
+        
+        - name: Get EC2 IP
+          id: terraform_output
+          run: |
+            cd terraform
+            echo "EC2_IP=$(terraform output -raw ec2_public_ip)" >> $GITHUB_ENV
+
+        - name: Setup SSH Key
+          run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+            chmod ~/.ssh/id_ed25519
+
+        - name: Update inventory
+          run: |
+            sed -i "s/EC2_IP_PLACEHOLDER/$EC2_IP/" ansible/inventory.ini
+
+        - name: Install Ansible
+          run: |
+            sudo yum update
+            sudo yum install -y ansible
+        
+        - name: Run Ansible
+          run: |
+            ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
