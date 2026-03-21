@@ -55,7 +55,9 @@ jobs:
           continue-on-error: true
 
         - name: Set exit code
-          run: echo "exitcode=${{ steps.plan.outcome == 'failure' && '2' || '0' }}" >> $GITHUB_ENV
+          run: |
+            echo "exitcode=${{ steps.plan.outcome == 'failure' && '2' || '0' }}"
+            echo "exitcode=${{ steps.plan.outcome == 'failure' && '2' || '0' }}" >> $GITHUB_ENV
         
         - name: Upload plan
           uses: actions/upload-artifact@v4
