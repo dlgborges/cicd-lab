@@ -3,14 +3,38 @@
   become: true
 
   tasks:
+    - name: Update packages
+      yum:
+        name: "*"
+        state: latest
+    
     - name: Install Docker
-      apt:
-        name: docker.io
+      ansible.builtin.yum:
+        name: docker
         state: present
-        update_cache: yes
+        update_cache: true
 
     - name: Start Docker
       service:
         name: docker
         state: started
         enabled: true
+
+    - name: Add ec2-user to docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+    
+    - name: Run test container
+      command: docker run -d --name nginx_test -p 80:80 nginx
+      tags: docker_test
+
+    - name: Stop test container
+      command: docker stop nginx_test
+      tags: docker_test
+
+    - name: Remove test container
+      command: docker rm nginx_test
+      ignore_errors: yes
+      tags: docker_test
