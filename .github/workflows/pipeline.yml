@@ -101,7 +101,6 @@ jobs:
           working-directory: ./terraform
         
         - name: Terraform apply
-          if: env.exitcode == '2'
           run: terraform apply -refresh-only -auto-approve tfplan
           working-directory: ./terraform
         
