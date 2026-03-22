@@ -101,7 +101,7 @@ jobs:
           working-directory: ./terraform
         
         - name: Terraform apply
-          run: terraform apply -refresh-only -auto-approve tfplan
+          run: terraform apply -auto-approve tfplan
           working-directory: ./terraform
         
         - name: Get EC2 IP
