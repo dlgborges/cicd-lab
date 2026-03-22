@@ -130,9 +130,8 @@ jobs:
         
         - name: Disable host key checking
           run: |
-            cat ~/.ssh/config
-            echo
             echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+            cat ~/.ssh/config
 
         - name: Run Ansible
           run: |
