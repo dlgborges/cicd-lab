@@ -1,12 +1,17 @@
 - name: Configure EC2
   hosts: web
   become: true
+  gather_facts: false
 
   tasks:
     - name: Update packages
       yum:
         name: "*"
         state: latest
+
+    - name: Ensure Python is installed
+      raw: |
+        sudo yum install -y python3
     
     - name: Install Docker
       ansible.builtin.yum:
