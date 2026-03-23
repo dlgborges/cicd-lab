@@ -124,8 +124,8 @@ jobs:
 
         - name: Install Ansible
           run: |
-            sudo apt update
-            sudo apt install -y ansible
+            pip install --upgrade pip
+            pip install "ansible-core==2.14.10"
         
         - name: Disable host key checking
           run: |
