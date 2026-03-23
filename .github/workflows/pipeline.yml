@@ -122,15 +122,30 @@ jobs:
             sed -i "s/EC2_IP_PLACEHOLDER/$EC2_IP/" ansible/inventory.ini
             cat ansible/inventory.ini
 
-        - name: Install Ansible
+        - name: Setup Python venv for Ansible
+          shell: bash
           run: |
-            pip install --upgrade pip
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip setuptools wheel
             pip install "ansible-core==2.14.10"
+            python --version
+            ansible --version
         
         - name: Disable host key checking
           run: |
             echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
             cat ~/.ssh/config
+
+        - name: Install Docker collection
+          run: |
+            source .venv/bin/activate
+            ansible-galaxy collection install community.docker
+
+        - name: List installed collections
+          run: |
+            source .venv/bin/activate
+            ansible-galaxy collection list
 
         - name: Run Ansible
           run: |

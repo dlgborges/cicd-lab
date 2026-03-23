@@ -17,7 +17,7 @@
 
   tasks:
     - name: Update packages
-      yum:
+      ansible.builtin.yum:
         name: "*"
         state: latest
     
@@ -40,7 +40,7 @@
         append: yes
     
     - name: Install Docker Python SDK
-      yum: 
+      ansible.builtin.yum:: 
         name: python3-pip
         state: present
     
