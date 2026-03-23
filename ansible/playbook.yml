@@ -38,10 +38,19 @@
         name: ec2-user
         groups: docker
         append: yes
+    
+    - name: Install Docker Python SDK
+      yum: python3-pip
+      state: present
+    
+    - name: Install Docker SDK for Python
+      pip:
+        name: docker
 
     - name: Run nginx container
       community.docker.docker_container:
       name: nginx_test
-      image: started
+      image: nginx
+      state: started
       ports:
         - "80:80"
