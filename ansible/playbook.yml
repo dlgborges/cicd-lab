@@ -1,3 +1,14 @@
+- name: Bootstrap EC2 (Install Python)
+  hosts: web
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Ensure Python is installed
+      raw: |
+        yum install -y python3
+      args:
+        executable: /bin/bash
+
 - name: Configure EC2
   hosts: web
   become: false
@@ -8,10 +19,6 @@
       yum:
         name: "*"
         state: latest
-
-#    - name: Ensure Python is installed
-#      raw: |
-#        sudo yum install -y python3
     
     - name: Install Docker
       ansible.builtin.yum:
