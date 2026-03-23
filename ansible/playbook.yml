@@ -3,9 +3,10 @@
   gather_facts: false
   become: yes
   tasks:
-    - name: Ensure Python is installed
+    - name: Ensure Python 3.8 is installed
       raw: |
-        yum install -y python3
+        amazon-linux-extras enable python3.8
+        yum install -y python38
       args:
         executable: /bin/bash
 
