@@ -38,16 +38,16 @@
         name: ec2-user
         groups: docker
         append: yes
-    
+
+    - name: Stop test container
+      command: docker stop nginx_test
+      tags: docker_test
+
+    - name: Remove test container
+      command: docker rm nginx_test
+      ignore_errors: yes
+      tags: docker_test
+
     - name: Run test container
       command: docker run -d --name nginx_test -p 80:80 nginx
       tags: docker_test
-
-#    - name: Stop test container
-#      command: docker stop nginx_test
-#      tags: docker_test
-
-#    - name: Remove test container
-#      command: docker rm nginx_test
-#      ignore_errors: yes
-#      tags: docker_test
