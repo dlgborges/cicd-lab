@@ -13,7 +13,7 @@
 - name: Configure EC2
   hosts: web
   become: true
-  gather_facts: false
+  gather_facts: true
 
   tasks:
     - name: Update packages
