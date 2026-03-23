@@ -11,7 +11,7 @@
 
 - name: Configure EC2
   hosts: web
-  become: false
+  become: true
   gather_facts: false
 
   tasks:
