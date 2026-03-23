@@ -127,8 +127,13 @@ jobs:
           run: |
             python -m venv .venv
             . .venv/bin/activate
+
             python -m pip install --upgrade pip setuptools wheel
-            pip install "ansible-core==2.14.10"
+            
+            pip install "ansible-core==2.14.10" \
+                        "urllib3<2" \
+                        "requests<2.32"
+
             python --version
             ansible --version
         
