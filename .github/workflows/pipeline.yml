@@ -134,4 +134,4 @@ jobs:
 
         - name: Run Ansible
           run: |
-            ansible-playbook -i ansible/inventory.ini ansible/playbook.yml -vvv
+            cd ansible && ansible-playbook -i ansible/inventory.ini ansible/playbook.yml -vvv
