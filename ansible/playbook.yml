@@ -41,7 +41,7 @@
     
     - name: Install Docker Python SDK
       yum: python3-pip
-      state: present
+        state: present
     
     - name: Install Docker SDK for Python
       pip:
@@ -49,8 +49,8 @@
 
     - name: Run nginx container
       community.docker.docker_container:
-      name: nginx_test
-      image: nginx
-      state: started
-      ports:
-        - "80:80"
+        name: nginx_test
+        image: nginx
+        state: started
+        ports:
+          - "80:80"
