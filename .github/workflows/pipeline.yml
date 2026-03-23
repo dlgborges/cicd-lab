@@ -132,6 +132,10 @@ jobs:
             echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
             cat ~/.ssh/config
 
+        - name: Install Docker Ansible Collection
+          run: |
+            cd ansible && ansible-galaxy collection install community.docker
+
         - name: Run Ansible
           run: |
-            cd ansible && ansible-playbook -i inventory.ini ./playbook.yml -vvv
+            ansible-playbook -i inventory.ini ./playbook.yml -vvv
