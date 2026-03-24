@@ -67,14 +67,15 @@ jobs:
               echo "Terraform plan failed"
               exit 1
             fi
-          
+        
+        - name: Dump all outputs
+          run: |
+            echo "Plan exit code (step output): ${{ steps.plan.outputs.exitcode }}"
+            echo "Raw GITHUB_OUTPUT contents:"
+            cat $GITHUB_OUTPUT
+
         - name: Debug exit code
           run: echo "Exit code was ${{ steps.plan.outputs.exitcode }}"
-
-        - name: Set exit code
-          run: |
-            echo "exitcode=${{ steps.plan.outputs.exitcode == 'failure' && '2' || '0' }}"
-            echo "exitcode=${{ steps.plan.outputs.exitcode == 'failure' && '2' || '0' }}" >> $GITHUB_ENV
         
         - name: Upload plan
           uses: actions/upload-artifact@v4
@@ -86,8 +87,13 @@ jobs:
       needs: terraform-plan
       runs-on: ubuntu-latest
       environment: prod
+      if: needs.terraform-plan.outputs.exitcode == '2'
       
       steps:
+        - name: Verify received exit code
+          run: |
+            echo "Received exitcode from terraform-plan job: ${{ needs.terraform-plan.outputs.exitcode }}"
+
         - name: Configure AWS credentials
           uses: aws-actions/configure-aws-credentials@v4
           with:
