@@ -93,7 +93,7 @@ resource "aws_security_group" "default" {
 
 resource "aws_instance" "cicd-lab-instance" {
     ami             = "ami-0c02fb55956c7d316"
-    instance_type   = "t2.micro"
+    instance_type   = "t3.micro"
     key_name = "cicd-key"
     vpc_security_group_ids = [
         aws_security_group.allow_ssh.id,
