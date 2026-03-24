@@ -28,7 +28,7 @@ jobs:
       runs-on: ubuntu-latest
 
       outputs:
-          tf_plan_exitcode: ${{ steps.plan.outputs.exitcode }}
+          exitcode: ${{ steps.plan.outputs.exitcode }}
 
       steps:
         - name: Configure AWS credentials
@@ -53,9 +53,13 @@ jobs:
         
         - name: Save plan
           id: plan
+          working-directory: ./terraform
+          shell: bash
           run: | 
+            set +e
             terraform plan -detailed-exitcode -out=tfplan
             EXIT_CODE=$?
+            set -e
 
             echo "exitcode=$EXIT_CODE" >> $GITHUB_OUTPUT
 
@@ -63,15 +67,14 @@ jobs:
               echo "Terraform plan failed"
               exit 1
             fi
-          working-directory: ./terraform
-
+          
         - name: Debug exit code
           run: echo "Exit code was ${{ steps.plan.outputs.exitcode }}"
 
         - name: Set exit code
           run: |
-            echo "exitcode=${{ steps.plan.outcome == 'failure' && '2' || '0' }}"
-            echo "exitcode=${{ steps.plan.outcome == 'failure' && '2' || '0' }}" >> $GITHUB_ENV
+            echo "exitcode=${{ steps.plan.outputs.exitcode == 'failure' && '2' || '0' }}"
+            echo "exitcode=${{ steps.plan.outputs.exitcode == 'failure' && '2' || '0' }}" >> $GITHUB_ENV
         
         - name: Upload plan
           uses: actions/upload-artifact@v4
