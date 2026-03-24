@@ -57,7 +57,7 @@ jobs:
             terraform plan -detailed-exitcode -out=tfplan
             EXIT_CODE=$?
 
-            echo "exitcode=EXIT_CODE" >> $GITHUB_OUTPUT
+            echo "exitcode=$EXIT_CODE" >> $GITHUB_OUTPUT
 
             if [ $EXIT_CODE -eq 1 ]; then
               echo "Terraform plan failed"
