@@ -60,3 +60,7 @@
         state: started
         ports:
           - "80:80"
+
+    - name: Verify nginx is up
+      run: |
+        curl -f http://$EC2_IP || exit 1
