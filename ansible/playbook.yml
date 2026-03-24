@@ -49,7 +49,9 @@
        executable: pip3
        name:
          - docker
-         - requests
+         - "requests<2.32"
+         - "urllib3<2"
+       state: forcereinstall
 
     - name: Run nginx container
       community.docker.docker_container:
