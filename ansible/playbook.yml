@@ -63,4 +63,9 @@
 
     - name: Verify nginx is up
       ansible.builtin.uri:
-        url: http://{{ ansible_host }}:80
+        url: http://{{ hostvars[inventory_hostname].ansible_host }}:80
+        status_code: 200
+      register: result
+      retries: 10
+      delay: 5
+      until: result.status == 200
