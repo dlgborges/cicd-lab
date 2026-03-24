@@ -63,4 +63,4 @@
 
     - name: Verify nginx is up
       run: |
-        curl -f http://$EC2_IP || exit 1
+        curl -f http://{{ ansible_host }} || exit 1
