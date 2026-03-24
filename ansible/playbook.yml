@@ -62,5 +62,5 @@
           - "80:80"
 
     - name: Verify nginx is up
-      run: |
-        curl -f http://{{ ansible_host }} || exit 1
+      ansible.builtin.uri:
+        url: http://{{ ansible_host }}:80
