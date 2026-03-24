@@ -26,6 +26,10 @@ jobs:
     terraform-plan:
       needs: build
       runs-on: ubuntu-latest
+
+      outputs:
+          tf_plan_exitcode: ${{ steps.plan.outputs.exitcode }}
+
       steps:
         - name: Configure AWS credentials
           uses: aws-actions/configure-aws-credentials@v4
@@ -50,9 +54,15 @@ jobs:
         - name: Save plan
           id: plan
           run: |
+            set +e  
             terraform plan -detailed-exitcode -out=tfplan
+            echo "exitcode=$?" >> $GITHUB_OUTPUT
+            exit 0
           working-directory: ./terraform
           continue-on-error: true
+
+        - name: Debug exit code
+          run: echo "Exit code was ${{ steps.plan.outputs.exitcode }}"
 
         - name: Set exit code
           run: |
@@ -160,5 +170,5 @@ jobs:
         - name: Run Ansible
           run: |
             source .venv/bin/activate
-            ANSIBLE_CONFIG=ansible/ansible.cfg \
+            
             .venv/bin/ansible-playbook -i ansible/inventory.ini ansible/playbook.yml -vvv
