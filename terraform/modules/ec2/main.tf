@@ -91,21 +91,34 @@ resource "aws_security_group" "default" {
     vpc_id      = "vpc-0256e601c483caf34"
 }
 
+resource "aws_eip" "this" {
+    domain = "vpc"
+
+    tags = {
+        Name = "cicd-lab-eip-${var.env}"
+    }
+}
+
 resource "aws_instance" "cicd-lab-instance" {
     ami             = "ami-0c02fb55956c7d316"
-    instance_type   = "t3.micro"
-    key_name = "cicd-key"
+    instance_type   = var.instance_type
+    key_name        = "cicd-key"
     vpc_security_group_ids = [
         aws_security_group.allow_ssh.id,
         aws_security_group.default.id
     ]
 
     tags = {
-        Name = "cicd-lab-instance"
-        plan_file_test = "change #2 to make sure apply will be run"
+        Name            = "cicd-lab-instance-${var.env}"
+        plan_file_test  = "change #2 to make sure apply will be run"
     }
 }
 
+resource "aws_eip_association" "this" {
+    instance_id     = aws_instance.cicd-lab-instance.id
+    allocation_id   = aws_eip.this.id
+}
+
 output "public_ip" {
-    value = aws_instance.cicd-lab-instance.public_ip
+    value           = aws_instance.cicd-lab-instance.public_ip
 }
