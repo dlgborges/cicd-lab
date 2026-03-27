@@ -208,5 +208,5 @@ jobs:
         - name: Run Ansible
           run: |
             source .venv/bin/activate
-            
+            ANSIBLE_CONFIG=ansible/ansible.cfg \
             .venv/bin/ansible-playbook -i ansible/inventory.ini ansible/playbook.yml -vvv
