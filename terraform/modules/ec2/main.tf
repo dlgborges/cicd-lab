@@ -110,7 +110,7 @@ resource "aws_instance" "cicd-lab-instance" {
 
     tags = {
         Name            = "cicd-lab-instance-${var.env}"
-        plan_file_test  = "change #8 to make sure apply will be run"
+        plan_file_test  = "change #9 to make sure apply will be run"
     }
 }
 
