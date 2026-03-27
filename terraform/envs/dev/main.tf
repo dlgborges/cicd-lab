@@ -5,7 +5,7 @@ provider "aws" {
 module "ec2" {
     source = "../../modules/ec2"
 
-    instance_type   = "t2.micro"
+    instance_type   = "t3.micro"
     env             = "dev"
 }
 
