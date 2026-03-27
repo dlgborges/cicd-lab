@@ -162,8 +162,12 @@ jobs:
         - name: Setup SSH Key
           run: |
             mkdir -p ~/.ssh
-            echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+            printf "%$" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
             chmod 600 ~/.ssh/id_ed25519
+
+        - name: Debug SSH Key
+          run: |
+            head -n 3 ~/.ssh/id_ed25519
 
         - name: Update inventory
           run: |
