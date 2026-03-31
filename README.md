@@ -1,4 +1,4 @@
-On this project, the goal is to go from scratch to AIOP.
+On this project, the goal is to go from scratch to AIOPs.
 
 We start with basic infrastructure management and transition to the most modern/current tools to provision and later manage a whole infrastructure.
 
