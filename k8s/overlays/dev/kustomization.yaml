@@ -1,6 +1,7 @@
 resources:
   - ../../base
   - configmap.yaml
+  - nginx-servicemonitor.yaml
 
 namespace: dev
 
