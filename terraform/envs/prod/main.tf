@@ -5,8 +5,8 @@ provider "aws" {
 module "ec2" {
     source = "../../modules/ec2"
 
-    instance_type   = "t3.micro"
-    env             = "dev"
+    instance_type   = "t2.micro"
+    env             = "prod"
 }
 
 output "public_ip" {

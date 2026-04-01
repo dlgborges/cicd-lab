@@ -1,0 +1,15 @@
+resources:
+  - ../../base
+  - configmap.yaml
+  - nginx-servicemonitor.yaml
+
+namespace: dev
+
+patches:
+  - target:
+      kind: Deployment
+      name: nginx
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1

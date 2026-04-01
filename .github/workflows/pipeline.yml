@@ -4,6 +4,8 @@ on:
     push:
         branches:
             - main
+            - develop
+            - 'feature/**' 
 
 env:
   ENVIRONMENT: dev
@@ -39,7 +41,14 @@ jobs:
     build:
       needs: [set-env, ci]
       runs-on: ubuntu-latest
+      
       steps:
+        - name: Login to Docker Hub
+          uses: docker/login-action@v3
+          with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+
         - uses: actions/checkout@v3
         - run: docker build -t cicd-lab:${{ github.sha }} .
     
@@ -103,7 +112,7 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: tfplan
-            path: terraform/tfplan 
+            path: ./terraform/envs/${{ needs.set-env.outputs.env }} 
 
     terraform-apply:
       needs: [set-env, terraform-plan]
@@ -139,7 +148,7 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: tfplan
-            path: terraform
+            path: ./terraform/envs/${{ needs.set-env.outputs.env }}
         
         - name: Terraform init
           run: terraform init
@@ -151,16 +160,33 @@ jobs:
         
         - name: Get EC2 IP
           id: terraform_output
+          working-directory: ./terraform/envs/${{ needs.set-env.outputs.env }}
           run: |
-            cd terraform
+            #cd terraform
             echo "EC2_IP=$(terraform output -raw public_ip)"
             echo "EC2_IP=$(terraform output -raw public_ip)" >> $GITHUB_ENV
+
+        - name: Check if secret exists
+          run: |
+            if [ -z "${{ secrets.EC2_SSH_KEY_B64 }}" ]; then
+              echo "SECRET IS EMPTY"
+            exit 1
+            else
+              echo "SECRET EXISTS"
+            fi
 
         - name: Setup SSH Key
           run: |
             mkdir -p ~/.ssh
-            echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+            echo "${{ secrets.EC2_SSH_KEY_B64 }}" | base64 -d > ~/.ssh/id_ed25519
             chmod 600 ~/.ssh/id_ed25519
+            # Verify the key was written correctly
+            ssh-keygen -l -f ~/.ssh/id_ed25519
+        
+        - name: Debug SSH key
+          run: |
+            ls -l ~/.ssh
+            head -n 3 ~/.ssh/id_ed25519
 
         - name: Update inventory
           run: |
@@ -205,5 +231,5 @@ jobs:
         - name: Run Ansible
           run: |
             source .venv/bin/activate
-            
+            ANSIBLE_CONFIG=ansible/ansible.cfg \
             .venv/bin/ansible-playbook -i ansible/inventory.ini ansible/playbook.yml -vvv
