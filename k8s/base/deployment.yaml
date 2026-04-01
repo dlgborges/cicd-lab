@@ -20,3 +20,19 @@ spec:
           envFrom:
             - configMapRef:
                 name: app-config
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+          volumes:
+            - name: nginx-config
+              ConfigMap:
+                name: nginx-config
+
+        - name: nginx-exporter
+          image: nginx/nginx-prometheus-exporter:latest
+          args:
+            - "-nginx.scrape-uri=http://localhost:80/stub_status"
+          ports:
+            - name: metrics
+              containerPort: 9113
