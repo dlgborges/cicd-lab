@@ -6,17 +6,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: app
   template:
     metadata:
       labels:
-        app: nginx
+        app: app
     spec:
       containers:
-        - name: nginx
-          image: nginx
+        - name: app
+          image: cicd-lab:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           envFrom:
             - configMapRef:
                 name: app-config
