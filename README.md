@@ -4,7 +4,7 @@ We start with basic infrastructure management and transition to the most modern/
 
 The end goal is to have agents managing (debugging/troubleshooting) possible infrastructure problems/issues/conflicts that arise.
 
-So, it's a phased implementation. Checkout my commits to understand how the project is evolving.
+So, it's a phased implementation. Checkout my commits timeline to really understand how the project is evolving.
 
 Tech Stack:
 
