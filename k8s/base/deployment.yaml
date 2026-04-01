@@ -24,11 +24,6 @@ spec:
             - name: nginx-config
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
-          volumes:
-            - name: nginx-config
-              configMap:
-                name: nginx-config
-
         - name: nginx-exporter
           image: nginx/nginx-prometheus-exporter:latest
           args:
@@ -36,3 +31,8 @@ spec:
           ports:
             - name: metrics
               containerPort: 9113
+
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
