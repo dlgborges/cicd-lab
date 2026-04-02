@@ -15,6 +15,7 @@ spec:
       containers:
         - name: app
           image: cicd-lab:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           envFrom:

@@ -48,13 +48,20 @@ jobs:
           with:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+        
         - uses: actions/checkout@v3
-        - run: docker build -t cicd-lab:${{ github.sha }} .
+        
+        - name: Build the Docker image
+          run: |
+            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cicd-lab:${{ github.sha }} .
+
+        - name: Push image
+          run: |
+            docker push ${{ secrets.DOCKERHUB_USERNAME }}/cicd-lab:${{ github.sha }}
 
         - name: Update image tag in manifests
           run: |
-            sed -i "s|image: cicd-lab:.*|image: cicd-lab:${{ github.sha }}|g" k8s/base/deployment.yaml
+            sed -i "s|image: .*cicd-lab:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/cicd-lab:${{ github.sha }}|g" k8s/base/deployment.yaml
 
         - name: Commit updated manifest
           run: |
