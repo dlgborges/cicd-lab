@@ -269,6 +269,10 @@ jobs:
           with:
             terraform_wrapper: false
 
+        - name: Terraform init
+          run: terraform init
+          working-directory: ./terraform/envs/${{ env.ENVIRONMENT }}
+
         - name: Terraform destroy EC2 + EIP only
           run: |
             terraform destroy -auto-approve \
