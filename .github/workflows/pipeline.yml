@@ -255,3 +255,23 @@ jobs:
             source .venv/bin/activate
             ANSIBLE_CONFIG=ansible/ansible.cfg \
             .venv/bin/ansible-playbook -i ansible/inventory.ini ansible/playbook.yml -vvv
+
+    terraform-cleanup:
+      needs: [terraform-apply]   # or last successful infra step
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v3
+          with:
+            terraform_wrapper: false
+
+        - name: Terraform destroy EC2 + EIP only
+          run: |
+            terraform destroy -auto-approve \
+              -target=module.ec2.aws_instance.cicd-lab-instance \
+              -target=module.ec2.aws_eip.this \
+              -target=module.ec2.aws_eip_association.this
+          working-directory: ./terraform/envs/${{ env.ENVIRONMENT }}
