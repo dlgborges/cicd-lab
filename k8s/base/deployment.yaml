@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: app
 spec:
   replicas: 1
   selector:
@@ -20,19 +20,3 @@ spec:
           envFrom:
             - configMapRef:
                 name: app-config
-          volumeMounts:
-            - name: nginx-config
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
-        - name: nginx-exporter
-          image: nginx/nginx-prometheus-exporter:latest
-          args:
-            - "-nginx.scrape-uri=http://localhost:80/stub_status"
-          ports:
-            - name: metrics
-              containerPort: 9113
-
-      volumes:
-        - name: nginx-config
-          configMap:
-            name: nginx-config
