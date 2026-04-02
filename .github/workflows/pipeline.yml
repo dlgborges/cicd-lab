@@ -258,6 +258,7 @@ jobs:
 
     terraform-cleanup:
       needs: [terraform-apply]   # or last successful infra step
+      if: always() && needs.terraform-apply.result != 'skipped'
       runs-on: ubuntu-latest
 
       steps:
