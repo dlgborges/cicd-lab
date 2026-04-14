@@ -1,17 +1,18 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: nginx-monitor
+  name: app-monitor
   namespace: monitoring
   labels:
     release: monitoring
 spec:
   selector:
     matchLabels:
-      app: nginx
+      app: app
   namespaceSelector:
     matchNames:
       - dev
   endpoints:
-    - port: metrics
-      interval: 15s
+    - port: http
+      path: /metrics
+      interval: 5s

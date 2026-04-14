@@ -1,38 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: app
   template:
     metadata:
       labels:
-        app: nginx
+        app: app
     spec:
       containers:
-        - name: nginx
-          image: nginx
+        - name: app
+          image: dlgborges/cicd-lab:827104b3cf7dea424ee896c6b8649cc4fa75b038
+          imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           envFrom:
             - configMapRef:
                 name: app-config
-          volumeMounts:
-            - name: nginx-config
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
-        - name: nginx-exporter
-          image: nginx/nginx-prometheus-exporter:latest
-          args:
-            - "-nginx.scrape-uri=http://localhost:80/stub_status"
-          ports:
-            - name: metrics
-              containerPort: 9113
-
-      volumes:
-        - name: nginx-config
-          configMap:
-            name: nginx-config
