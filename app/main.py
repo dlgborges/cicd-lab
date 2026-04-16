@@ -7,5 +7,9 @@ app = FastAPI()
 def read_root():
     return {"status": "Hello CI/CD Pipeline"}
 
+@app.get("/error")
+def error():
+    raise Exception("forced error")
+
 # 👇 THIS is the key part
 Instrumentator().instrument(app).expose(app)
