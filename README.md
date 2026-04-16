@@ -15,3 +15,4 @@ Tech Stack:
 - Microservices: Docker / Kubernetes
 - Observability: Prometheus/Grafana
 - CI/CD: GitHub Actions
+- AIOps: agents
