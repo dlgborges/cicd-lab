@@ -24,10 +24,8 @@ def fetch_users():
     count = cur.fetchone()[0]
     
     if count == 0:
-        cur.execute(
-            "INSERT INTO users (name) VALUES (%s)",
-        ("Alice", "Bob")
-        )
+        cur.execute("INSERT INTO users (name) VALUES (%s)",("Alice",))
+        cur.execute("INSERT INTO users (name) VALUES (%s)",("Bob",))
     
     conn.commit()
     
