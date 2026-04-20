@@ -14,10 +14,19 @@ spec:
     spec:
       containers:
         - name: app
-          image: dlgborges/cicd-lab:868163c0073b900808be9d3b35f9244f78fe8b80
+          image: dlgborges/cicd-lab:e1c8e672ba8d8a164218994603beb6095bcf01be
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
           envFrom:
             - configMapRef:
                 name: app-config
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_NAME
+              value: appdb
+            - name: DB_USER
+              value: appuser
+            - name: DB_PASSWORD
+              value: apppass
