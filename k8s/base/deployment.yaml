@@ -21,3 +21,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: app-config
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_NAME
+              value: appdb
+            - name: DB_USER
+              value: appuser
+            - name: DB_PASSWORD
+              value: apppass
