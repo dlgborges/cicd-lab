@@ -14,7 +14,7 @@ def get_conn():
 def fetch_users():
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT pg_sleep(3);")
+    cur.execute("SELECT pg_sleep(8);")
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
