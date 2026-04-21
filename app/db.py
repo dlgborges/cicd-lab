@@ -7,12 +7,14 @@ def get_conn():
         dbname=os.getenv("DB_NAME", "appdb"),
         user=os.getenv("DB_USER", "appuser"),
         password=os.getenv("DB_PASSWORD", "apppass"),
-        port=os.getenv("DB_PORT", "5432")
+        port=os.getenv("DB_PORT", "5432"),
+        connect_timeout=5
     )
 
 def fetch_users():
     conn = get_conn()
     cur = conn.cursor()
+    cur.execute("SELECT pg_sleep(3);")
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
