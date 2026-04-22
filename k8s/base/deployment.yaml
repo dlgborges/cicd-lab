@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: dlgborges/cicd-lab:54c333e3b94259357cf77c4b1807a63fe2c72456
+          image: dlgborges/cicd-lab:95f8e93de939629ffb3a0f584e551b67e301c62c
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
