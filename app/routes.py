@@ -6,39 +6,39 @@ router = APIRouter()
 @router.get("/")
 def root():
     """
-    Rota raiz que retorna o status do sistema.
+    Root route that returns the system status.
 
     Returns:
-        dict: Dicionário contendo o status do sistema.
+        dict: Dictionary containing the system status.
     """
     return get_status()
 
 @router.get("/health")
 def health():
     """
-    Rota de saúde para verificar se a aplicação está funcionando corretamente.
+    Health check route to verify if the application is working correctly.
 
     Returns:
-        dict: Dicionário com um status "ok" indicando que a aplicação está funcionando normalmente.
+        dict: Dictionary with a "status" key set to "ok", indicating that the application is functioning normally.
     """
     return {"status": "ok"}
 
 @router.get("/users")
 def users():
     """
-    Rota que retorna uma lista de usuários.
+    Route that returns a list of users.
 
     Returns:
-        list: Lista de usuários retornada pelo serviço.
+        list: List of users returned by the service.
     """
     return get_users()
 
 @router.get("/error")
 def error():
     """
-    Rota que força um erro para fins de teste ou demonstração.
+    Route that forces an error for testing or demonstration purposes.
 
     Raises:
-        Exception: Exceção forçada com a mensagem "forced error".
+        Exception: Forced exception with the message "forced error".
     """
     raise Exception("forced error")
